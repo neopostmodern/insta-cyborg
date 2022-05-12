@@ -1,0 +1,10 @@
+{
+  "packages": [
+    "bot",
+    "config",
+    "preview",
+    "server",
+    "util"
+  ],
+  "version": "0.0.0"
+}

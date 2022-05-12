@@ -1,0 +1,33 @@
+{
+  "name": "@insta-cyborg/util",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "> TODO: description",
+  "author": "neopostmodern <clemens@neopostmodern.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "dist/cjs/index.js",
+  "module": "dist/mjs/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/mjs/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -fr dist/* && tsc -p tsconfig-mjs.json && tsc -p tsconfig-cjs.json && bash scripts/fix-package-type.sh",
+    "postinstall": "npm run build"
+  },
+  "dependencies": {
+    "@insta-cyborg/config": "^0.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21"
+  }
+}

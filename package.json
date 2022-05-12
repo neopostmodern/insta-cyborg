@@ -1,0 +1,15 @@
+{
+  "name": "root",
+  "private": true,
+  "devDependencies": {
+    "lerna": "^4.0.0",
+    "prettier": "^2.5.1",
+    "prettier-plugin-organize-imports": "^2.3.4"
+  },
+  "scripts": {
+    "bot:run": "cd bot && npm run start",
+    "preview:start": "cd preview && npm run start",
+    "server:start": "cd server && npm run start",
+    "util:build": "cd util && npm run build"
+  }
+}
