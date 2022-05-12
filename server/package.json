@@ -1,8 +1,8 @@
 {
   "author": "neopostmodern <clemens@neopostmodern.com>",
   "dependencies": {
-    "@insta-cyborg/config": "^0.0.0",
-    "@insta-cyborg/util": "^0.0.0",
+    "@insta-cyborg/config": "^0.1.0",
+    "@insta-cyborg/util": "^0.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "puppeteer-core": "^10.2.0",
@@ -35,5 +35,5 @@
     "start": "node --experimental-specifier-resolution=node --loader ts-node/esm lib/index.ts"
   },
   "type": "module",
-  "version": "0.0.0"
+  "version": "0.1.0"
 }

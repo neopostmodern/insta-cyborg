@@ -1,6 +1,6 @@
 {
   "name": "@insta-cyborg/util",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "description": "> TODO: description",
   "author": "neopostmodern <clemens@neopostmodern.com>",
@@ -25,7 +25,7 @@
     "postinstall": "npm run build"
   },
   "dependencies": {
-    "@insta-cyborg/config": "^0.0.0"
+    "@insta-cyborg/config": "^0.1.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.21"
