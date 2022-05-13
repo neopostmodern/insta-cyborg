@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { getImageUrl, ImagePurpose } from "@insta-cyborg/util";
-import { Close, Delete, Edit } from "@mui/icons-material";
+import { css } from '@emotion/react'
+import { getImageUrl, ImagePurpose } from '@insta-cyborg/util'
+import { Close, Delete, Edit } from '@mui/icons-material'
 import {
   CircularProgress,
   IconButton,
@@ -9,59 +9,59 @@ import {
   ListItemText,
   MenuItem,
   Paper,
-} from "@mui/material";
-import React from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import useSingleImage from "../data/useSingleImage";
-import { CornerControls } from "../util";
-import DeletePostDialog from "./DeletePostDialog";
-import { ImageDescription } from "./ImageDescription";
-import UserLine from "./UserLine";
+} from '@mui/material'
+import React from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import useSingleImage from '../data/useSingleImage'
+import { CornerControls } from '../util'
+import DeletePostDialog from './DeletePostDialog'
+import { ImageDescription } from './ImageDescription'
+import UserLine from './UserLine'
 
 const SinglePost = ({
   deleteImage,
 }: {
-  deleteImage: (imageId: string) => Promise<void>;
+  deleteImage: (imageId: string) => Promise<void>
 }) => {
-  const { imageId } = useParams();
+  const { imageId } = useParams()
   if (imageId === undefined) {
-    throw Error("Bad URL");
+    throw Error('Bad URL')
   }
-  const [imageData] = useSingleImage(imageId);
-  const navigate = useNavigate();
+  const [imageData] = useSingleImage(imageId)
+  const navigate = useNavigate()
 
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false)
   const handleClickDeleteNote = React.useCallback(
     () => setDialogOpen(true),
-    [setDialogOpen]
-  );
+    [setDialogOpen],
+  )
   const handleCloseDialog = React.useCallback(() => {
-    setDialogOpen(false);
-  }, [setDialogOpen]);
+    setDialogOpen(false)
+  }, [setDialogOpen])
   const handleDeleteImage = React.useCallback(
     () => deleteImage(imageId),
-    [deleteImage, imageId]
-  );
+    [deleteImage, imageId],
+  )
 
-  let postCaption;
-  if ("error" in imageData) {
+  let postCaption
+  if ('error' in imageData) {
     postCaption = (
       <>
         <b>Error</b>
         <br />
         {imageData.message}
       </>
-    );
-  } else if ("loading" in imageData) {
-    postCaption = <CircularProgress />;
+    )
+  } else if ('loading' in imageData) {
+    postCaption = <CircularProgress />
   } else {
-    postCaption = <ImageDescription postCaption={imageData.data.postCaption} />;
+    postCaption = <ImageDescription postCaption={imageData.data.postCaption} />
   }
 
   return (
     <>
-      <CornerControls horizontalAlignment="right">
-        <Link to="/">
+      <CornerControls horizontalAlignment='right'>
+        <Link to='/'>
           <IconButton>
             <Close />
           </IconButton>
@@ -115,7 +115,7 @@ const SinglePost = ({
             <UserLine
               actions={[
                 <MenuItem
-                  key="edit"
+                  key='edit'
                   onClick={() => navigate(`/post/${imageId}/edit`)}
                 >
                   <ListItemIcon>
@@ -123,7 +123,7 @@ const SinglePost = ({
                   </ListItemIcon>
                   <ListItemText>Edit description</ListItemText>
                 </MenuItem>,
-                <MenuItem key="delete" onClick={handleClickDeleteNote}>
+                <MenuItem key='delete' onClick={handleClickDeleteNote}>
                   <ListItemIcon>
                     <Delete />
                   </ListItemIcon>
@@ -146,7 +146,7 @@ const SinglePost = ({
         </Paper>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default SinglePost;
+export default SinglePost

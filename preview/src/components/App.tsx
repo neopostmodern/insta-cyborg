@@ -5,29 +5,29 @@ import {
   Preview,
   Visibility as VisibilityIcon,
   VisibilityOff,
-} from "@mui/icons-material";
-import { IconButton } from "@mui/material";
-import { useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
-import useImagesData from "../data/useAllImages";
-import { CornerControls, Visibility } from "../util";
-import EditPost from "./EditPost";
-import Grid from "./Grid";
-import SinglePost from "./SinglePost";
+} from '@mui/icons-material'
+import { IconButton } from '@mui/material'
+import { useState } from 'react'
+import { Route, Routes, useLocation } from 'react-router-dom'
+import useImagesData from '../data/useAllImages'
+import { CornerControls, Visibility } from '../util'
+import EditPost from './EditPost'
+import Grid from './Grid'
+import SinglePost from './SinglePost'
 
 function App() {
-  const [mobile, setMobile] = useState(false);
-  const [visibility, setVisibility] = useState<Visibility>(Visibility.PREVIEW);
-  const location = useLocation();
-  const [data, { requestNewImage, deleteImage }] = useImagesData();
+  const [mobile, setMobile] = useState(false)
+  const [visibility, setVisibility] = useState<Visibility>(Visibility.PREVIEW)
+  const location = useLocation()
+  const [data, { requestNewImage, deleteImage }] = useImagesData()
 
   return (
     <>
-      <CornerControls horizontalAlignment="left">
+      <CornerControls horizontalAlignment='left'>
         <IconButton onClick={() => setMobile(!mobile)}>
           {mobile ? <PhoneAndroid /> : <Computer />}
         </IconButton>
-        {location.pathname === "/" &&
+        {location.pathname === '/' &&
           {
             preview: (
               <IconButton onClick={() => setVisibility(Visibility.HIDDEN)}>
@@ -49,7 +49,7 @@ function App() {
 
       <Routes>
         <Route
-          path="/"
+          path='/'
           element={
             <Grid
               mobile={mobile}
@@ -60,13 +60,13 @@ function App() {
           }
         />
         <Route
-          path="/post/:imageId"
+          path='/post/:imageId'
           element={<SinglePost deleteImage={deleteImage} />}
         />
-        <Route path="/post/:imageId/edit" element={<EditPost />} />
+        <Route path='/post/:imageId/edit' element={<EditPost />} />
       </Routes>
     </>
-  );
+  )
 }
 
-export default App;
+export default App

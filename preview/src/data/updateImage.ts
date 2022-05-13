@@ -1,27 +1,27 @@
-import config from "@insta-cyborg/config";
-import { CaptionedImage } from "@insta-cyborg/util";
+import config from '@insta-cyborg/config'
+import { CaptionedImage } from '@insta-cyborg/util'
 
 const updateImage = async (
   imageId: string,
-  imageDiff: Partial<CaptionedImage>
+  imageDiff: Partial<CaptionedImage>,
 ): Promise<CaptionedImage> => {
   const request = await fetch(
     new URL(`images/${imageId}`, config.instaCyborgServerOrigin).toString(),
     {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(imageDiff),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    }
-  );
+    },
+  )
 
   if (!request.ok) {
-    console.error(request);
-    throw Error(`Failed to update image ${imageId}`); // todo: error handling
+    console.error(request)
+    throw Error(`Failed to update image ${imageId}`) // todo: error handling
   }
 
-  return await request.json();
-};
+  return await request.json()
+}
 
-export default updateImage;
+export default updateImage

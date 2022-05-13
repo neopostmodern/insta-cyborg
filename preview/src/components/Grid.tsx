@@ -1,23 +1,17 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { AllImagesData, getImageUrl, ImagePurpose } from "@insta-cyborg/util";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Stack,
-  Typography,
-} from "@mui/material";
-import React from "react";
-import { Link } from "react-router-dom";
-import { DataState } from "../data/dataUtil";
-import { Visibility } from "../util";
+import { css } from '@emotion/react'
+import { AllImagesData, getImageUrl, ImagePurpose } from '@insta-cyborg/util'
+import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { DataState } from '../data/dataUtil'
+import { Visibility } from '../util'
 
 interface GridProps {
-  mobile: boolean;
-  visibility: Visibility;
-  data: DataState<AllImagesData>;
-  requestNewImage: () => Promise<void>;
+  mobile: boolean
+  visibility: Visibility
+  data: DataState<AllImagesData>
+  requestNewImage: () => Promise<void>
 }
 const Grid: React.FC<GridProps> = ({
   mobile,
@@ -25,16 +19,16 @@ const Grid: React.FC<GridProps> = ({
   data,
   requestNewImage,
 }) => {
-  if ("error" in data) {
+  if ('error' in data) {
     return (
       <>
         <h1>Error</h1>
         {data.message}
       </>
-    );
+    )
   }
 
-  if ("loading" in data) {
+  if ('loading' in data) {
     return (
       <div
         css={css`
@@ -46,7 +40,7 @@ const Grid: React.FC<GridProps> = ({
       >
         <CircularProgress />
       </div>
-    );
+    )
   }
 
   return (
@@ -64,19 +58,19 @@ const Grid: React.FC<GridProps> = ({
         Insta-Cyborg
       </h1>
       <Stack
-        flexDirection="row"
+        flexDirection='row'
         spacing={2}
         marginBottom={2}
-        alignItems="baseline"
+        alignItems='baseline'
       >
         <Button
           onClick={() => {
-            requestNewImage();
+            requestNewImage()
           }}
         >
           Create new
         </Button>
-        <Box sx={{ marginLeft: "auto !important" }}>
+        <Box sx={{ marginLeft: 'auto !important' }}>
           <Typography>{data.data.posted.length}/123</Typography>
         </Box>
       </Stack>
@@ -92,13 +86,13 @@ const Grid: React.FC<GridProps> = ({
             <Link key={imageId} to={`/post/${imageId}`}>
               <div
                 css={css`
-                  ${visibility === Visibility.PREVIEW ? "opacity: 0.5;" : ""}
+                  ${visibility === Visibility.PREVIEW ? 'opacity: 0.5;' : ''}
                   background-image: ${visibility === Visibility.PREVIEW
-                    ? "linear-gradient(white, white), "
-                    : ""}
+                    ? 'linear-gradient(white, white), '
+                    : ''}
                   url("${getImageUrl(
                     imageId,
-                    ImagePurpose.POST_WITH_OVERLAY
+                    ImagePurpose.POST_WITH_OVERLAY,
                   )}");
                   background-blend-mode: saturation;
                   background-size: cover;
@@ -112,10 +106,10 @@ const Grid: React.FC<GridProps> = ({
           <div
             key={imageId}
             css={css`
-              background-image: url("${getImageUrl(
+              background-image: url('${getImageUrl(
                 imageId,
-                ImagePurpose.POST_WITH_OVERLAY
-              )}");
+                ImagePurpose.POST_WITH_OVERLAY,
+              )}');
               background-size: cover;
               background-position: 50% 50%;
               padding-bottom: 100%;
@@ -124,7 +118,7 @@ const Grid: React.FC<GridProps> = ({
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Grid;
+export default Grid

@@ -1,19 +1,19 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { Table, TableBody, TableCell, TableRow } from "@mui/material";
-import React from "react";
+import { css } from '@emotion/react'
+import { Table, TableBody, TableCell, TableRow } from '@mui/material'
+import React from 'react'
 
 const capitalize = (text: string) =>
-  text.charAt(0).toUpperCase() + text.substring(1);
+  text.charAt(0).toUpperCase() + text.substring(1)
 
 const ObjectAutoTable = ({
   object,
   blacklist = [],
   className = undefined,
 }: {
-  object: { [key: string]: Array<string> | string | number };
-  blacklist?: Array<string>;
-  className?: string;
+  object: { [key: string]: Array<string> | string | number }
+  blacklist?: Array<string>
+  className?: string
 }) => (
   <Table className={className}>
     <TableBody>
@@ -26,7 +26,7 @@ const ObjectAutoTable = ({
                 key
                   .split(/(?=[A-Z])/)
                   .map((word) => word.toLowerCase())
-                  .join(" ")
+                  .join(' '),
               )}
             </TableCell>
             <TableCell
@@ -53,6 +53,6 @@ const ObjectAutoTable = ({
         ))}
     </TableBody>
   </Table>
-);
+)
 
-export default ObjectAutoTable;
+export default ObjectAutoTable

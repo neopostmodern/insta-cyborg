@@ -1,17 +1,17 @@
-import config from "@insta-cyborg/config";
+import config from '@insta-cyborg/config'
 
 const deleteImage = async (imageId: string): Promise<void> => {
   const request = await fetch(
     new URL(`images/${imageId}`, config.instaCyborgServerOrigin).toString(),
     {
-      method: "DELETE",
-    }
-  );
+      method: 'DELETE',
+    },
+  )
 
   if (!request.ok) {
-    console.error(request);
-    throw Error(`Failed to update image ${imageId}`); // todo: error handling
+    console.error(request)
+    throw Error(`Failed to update image ${imageId}`) // todo: error handling
   }
-};
+}
 
-export default deleteImage;
+export default deleteImage

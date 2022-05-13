@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { captionForImagePost } from "@insta-cyborg/util";
-import { Close, Save as SaveIcon } from "@mui/icons-material";
+import { css } from '@emotion/react'
+import { captionForImagePost } from '@insta-cyborg/util'
+import { Close, Save as SaveIcon } from '@mui/icons-material'
 import {
   Button,
   CircularProgress,
@@ -9,51 +9,51 @@ import {
   IconButton,
   Paper,
   TextField,
-} from "@mui/material";
-import React, { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import useSingleImage from "../data/useSingleImage";
-import { CornerControls } from "../util";
-import { ImageDescription } from "./ImageDescription";
-import ObjectAutoTable from "./ObjectAutoTable";
+} from '@mui/material'
+import React, { useEffect } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import useSingleImage from '../data/useSingleImage'
+import { CornerControls } from '../util'
+import { ImageDescription } from './ImageDescription'
+import ObjectAutoTable from './ObjectAutoTable'
 
 const EditPost = () => {
-  const { imageId } = useParams();
+  const { imageId } = useParams()
   if (imageId === undefined) {
-    throw Error("Bad URL");
+    throw Error('Bad URL')
   }
-  const [imageData, { updateImage }] = useSingleImage(imageId);
-  const [currentCaption, setCurrentCaption] = React.useState("");
+  const [imageData, { updateImage }] = useSingleImage(imageId)
+  const [currentCaption, setCurrentCaption] = React.useState('')
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentCaption(event.target.value);
-  };
+    setCurrentCaption(event.target.value)
+  }
   const handleSave = () => {
-    updateImage({ postCaption: currentCaption });
-  };
+    updateImage({ postCaption: currentCaption })
+  }
 
   useEffect(() => {
-    if ("data" in imageData) {
-      setCurrentCaption(imageData.data.postCaption);
+    if ('data' in imageData) {
+      setCurrentCaption(imageData.data.postCaption)
     }
-  }, [imageData]);
+  }, [imageData])
 
-  if ("error" in imageData) {
+  if ('error' in imageData) {
     return (
       <>
         <b>Error</b>
         <br />
         {imageData.message}
       </>
-    );
+    )
   }
-  if ("loading" in imageData) {
-    return <CircularProgress />;
+  if ('loading' in imageData) {
+    return <CircularProgress />
   }
 
   return (
     <>
-      <CornerControls horizontalAlignment="right">
+      <CornerControls horizontalAlignment='right'>
         <Link to={`/post/${imageId}`}>
           <IconButton>
             <Close />
@@ -61,7 +61,7 @@ const EditPost = () => {
         </Link>
       </CornerControls>
       <Fab
-        color="primary"
+        color='primary'
         disabled={currentCaption === imageData.data.postCaption}
         onClick={handleSave}
         css={css`
@@ -94,17 +94,17 @@ const EditPost = () => {
         </div>
 
         <div>
-          <Paper sx={{ width: "450px", marginBottom: 1 }}>
+          <Paper sx={{ width: '450px', marginBottom: 1 }}>
             <ImageDescription postCaption={currentCaption} mobile />
           </Paper>
-          <Paper sx={{ width: "500px" }}>
+          <Paper sx={{ width: '500px' }}>
             <ImageDescription postCaption={currentCaption} />
           </Paper>
         </div>
 
         <div>
           <TextField
-            label="Post caption"
+            label='Post caption'
             multiline
             minRows={3}
             value={currentCaption}
@@ -128,12 +128,12 @@ const EditPost = () => {
         >
           <ObjectAutoTable
             object={imageData.data}
-            blacklist={["postCaption", "storyText"]}
+            blacklist={['postCaption', 'storyText']}
           />
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default EditPost;
+export default EditPost
