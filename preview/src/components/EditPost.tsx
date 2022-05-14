@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import config from '@insta-cyborg/config'
 import { captionForImagePost } from '@insta-cyborg/util'
 import { Close, Save as SaveIcon } from '@mui/icons-material'
 import {
@@ -86,7 +87,7 @@ const EditPost = () => {
       >
         <div>
           <img
-            src={`http://localhost:3001/media/${imageId}_post-overlay.jpg`}
+            src={`${config.instaCyborgServerOrigin}/media/${imageId}_post-overlay.jpg`}
             css={css`
               width: 100%;
             `}

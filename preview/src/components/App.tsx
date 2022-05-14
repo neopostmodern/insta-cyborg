@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { AUTHORIZATION_MISSING } from '@insta-cyborg/util'
 import {
   Computer,
   PhoneAndroid,
@@ -11,15 +12,25 @@ import { useState } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import useImagesData from '../data/useAllImages'
 import { CornerControls, Visibility } from '../util'
+import Authorization from './Authorization'
 import EditPost from './EditPost'
 import Grid from './Grid'
 import SinglePost from './SinglePost'
+import { Centered } from './util'
 
 function App() {
   const [mobile, setMobile] = useState(false)
   const [visibility, setVisibility] = useState<Visibility>(Visibility.PREVIEW)
   const location = useLocation()
   const [data, { requestNewImage, deleteImage }] = useImagesData()
+
+  if ('error' in data && data.message === AUTHORIZATION_MISSING) {
+    return (
+      <Centered>
+        <Authorization />
+      </Centered>
+    )
+  }
 
   return (
     <>

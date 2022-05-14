@@ -5,7 +5,9 @@ import {
   shuffleArray,
   textForStory,
 } from '@insta-cyborg/util'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import 'dotenv/config'
 import express from 'express'
 import * as fs from 'fs/promises'
 import * as path from 'path'
@@ -26,9 +28,54 @@ const port = 3001
 
 const app = express()
 app.use(express.json())
-app.use(cors())
+app.use(
+  cors({
+    credentials: true,
+    origin: true,
+  }),
+)
+app.use(cookieParser())
+app.use((request, response, next) => {
+  if (
+    !request.path.startsWith('/auth/') &&
+    (request.cookies.authorization || request.headers.authorization) !==
+      process.env.INSTA_CYBORG_AUTHORIZATION
+  ) {
+    response.status(401).send('Need to provide authorization header or cookie')
+    return
+  }
+  next()
+})
 app.use('/media', express.static(STORAGE_PATH_MEDIA))
-app.get('/images', async (request, response) => {
+app.post('/auth/login', (request, response) => {
+  if (!request.headers.authorization) {
+    response.status(400).send('No authorization header provided')
+    return
+  }
+  if (
+    request.headers.authorization !== process.env.INSTA_CYBORG_AUTHORIZATION
+  ) {
+    response.status(401).send('Invalid authorization')
+    return
+  }
+  response.cookie('authorization', request.headers.authorization, {
+    expires: new Date(Date.now() + 1000 * 3600 * 24 * 30),
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  })
+  response.sendStatus(204)
+})
+app.post('/auth/logout', (request, response) => {
+  response.cookie('authorization', '', {
+    maxAge: 0,
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  })
+  response.sendStatus(204)
+})
+app.get('/images', (request, response) => {
   response.send(
     JSON.stringify({
       posted: getPostedImageIds(),

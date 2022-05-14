@@ -2,10 +2,12 @@ import {
   fetchImageData,
   fetchImageList,
   ImagePurpose,
+  setAuthorizationHeaderForFetch,
 } from '@insta-cyborg/util'
 import { postImagePost, updateLinkInBio } from './instagram'
 import { clearTempFolder, downloadImageFile, markImagePosted } from './network'
 
+setAuthorizationHeaderForFetch(process.env.INSTA_CYBORG_AUTHORIZATION)
 const allImages = await fetchImageList()
 const imageId = allImages.available[0]
 if (!imageId) {

@@ -1,5 +1,5 @@
 import config from '@insta-cyborg/config'
-import { CaptionedImage } from '@insta-cyborg/util'
+import { CaptionedImage, fetchOptionsWithAuth } from '@insta-cyborg/util'
 
 const updateImage = async (
   imageId: string,
@@ -7,13 +7,13 @@ const updateImage = async (
 ): Promise<CaptionedImage> => {
   const request = await fetch(
     new URL(`images/${imageId}`, config.instaCyborgServerOrigin).toString(),
-    {
+    fetchOptionsWithAuth({
       method: 'PUT',
       body: JSON.stringify(imageDiff),
       headers: {
         'Content-Type': 'application/json',
       },
-    },
+    }),
   )
 
   if (!request.ok) {

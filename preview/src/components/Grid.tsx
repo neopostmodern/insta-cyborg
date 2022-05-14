@@ -5,7 +5,9 @@ import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { DataState } from '../data/dataUtil'
-import { Visibility } from '../util'
+import { CornerControls, Visibility } from '../util'
+import LogoutButton from './LogoutButton'
+import { Centered } from './util'
 
 interface GridProps {
   mobile: boolean
@@ -21,10 +23,10 @@ const Grid: React.FC<GridProps> = ({
 }) => {
   if ('error' in data) {
     return (
-      <>
+      <Centered>
         <h1>Error</h1>
         {data.message}
-      </>
+      </Centered>
     )
   }
 
@@ -50,6 +52,9 @@ const Grid: React.FC<GridProps> = ({
         margin: 100px auto 50px;
       `}
     >
+      <CornerControls horizontalAlignment='right'>
+        <LogoutButton />
+      </CornerControls>
       <h1
         css={css`
           font-family: Lobster Two;

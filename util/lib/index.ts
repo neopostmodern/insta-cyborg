@@ -71,10 +71,35 @@ Link in bio for more
 
 ${INSTAGRAM_TAGS.map((tag) => `#${tag}`).join(' ')}`
 
+export const AUTHORIZATION_MISSING = 'AUTHORIZATION_MISSING'
+
+let _authorizationHeader
+export const setAuthorizationHeaderForFetch = (authentication: string) => {
+  _authorizationHeader = authentication
+}
+
+export const fetchOptionsWithAuth = (
+  fetchOptions: RequestInit = {},
+): RequestInit => ({
+  credentials: 'include',
+  ...fetchOptions,
+  headers: {
+    authorization: _authorizationHeader,
+    ...fetchOptions.headers,
+  },
+})
+
 export const fetchImageList = async (): Promise<AllImagesData> => {
-  const response = await fetch(config.instaCyborgServerOrigin + '/images')
+  const response = await fetch(
+    config.instaCyborgServerOrigin + '/images',
+    fetchOptionsWithAuth(),
+  )
   if (!response.ok) {
-    console.error(await response.text())
+    const errorMessage = await response.text()
+    if (response.status === 401) {
+      throw new Error(AUTHORIZATION_MISSING)
+    }
+    console.error(errorMessage)
     throw new Error(
       `${response.status} (${response.statusText}) – ${response.url}`,
     )
@@ -87,6 +112,7 @@ export const fetchImageData = async (
 ): Promise<CaptionedImage> => {
   const response = await fetch(
     `${config.instaCyborgServerOrigin}/media/${imageId}.json`,
+    fetchOptionsWithAuth(),
   )
   if (!response.ok) {
     console.error(await response.text())

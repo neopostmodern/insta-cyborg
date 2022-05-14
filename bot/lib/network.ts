@@ -1,6 +1,7 @@
 import config from '@insta-cyborg/config'
 import {
   createRelativeDirectoryIfNotExists,
+  fetchOptionsWithAuth,
   getImageFileName,
   getImageUrl,
   ImagePurpose,
@@ -16,7 +17,10 @@ export const downloadImageFile = async (
   imageId: string,
   purpose: ImagePurpose,
 ): Promise<string> => {
-  const result = await fetch(getImageUrl(imageId, purpose))
+  const result = await fetch(
+    getImageUrl(imageId, purpose),
+    fetchOptionsWithAuth(),
+  )
   if (!result.ok) {
     throw Error('Download failed')
   }
@@ -44,9 +48,9 @@ export const downloadImageFile = async (
 export const markImagePosted = async (imageId: string): Promise<void> => {
   const result = await fetch(
     `${config.instaCyborgServerOrigin}/images/${imageId}/mark-posted`,
-    {
+    fetchOptionsWithAuth({
       method: 'POST',
-    },
+    }),
   )
   if (!result.ok) {
     throw new Error(
