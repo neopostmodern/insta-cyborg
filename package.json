@@ -9,6 +9,7 @@
   "scripts": {
     "bot:run": "cd bot && npm run start",
     "config:build": "cd config && npm run build",
+    "preview:build": "cd preview && npm run build",
     "preview:start": "cd preview && npm run start",
     "server:start": "cd server && npm run start",
     "util:build": "cd util && npm run build"
