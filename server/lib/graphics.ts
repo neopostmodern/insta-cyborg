@@ -73,6 +73,7 @@ const htmlToPng = async (html: string): Promise<Buffer> => {
   try {
     browser = await puppeteer.launch({
       headless: true,
+      executablePath: process.env.CHROMIUM_EXECUTABLE,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -80,7 +81,6 @@ const htmlToPng = async (html: string): Promise<Buffer> => {
         '--hide-scrollbars',
         '--disable-web-security',
       ],
-      executablePath: '/usr/bin/google-chrome',
       defaultViewport: {
         height: 1920,
         width: 1080,
