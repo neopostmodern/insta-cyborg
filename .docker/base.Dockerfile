@@ -6,7 +6,6 @@ WORKDIR /app
 ADD https://github.com/neopostmodern/insta-cyborg/archive/master.tar.gz ./git.tar.gz
 RUN tar --strip-components=1 -zxf git.tar.gz
 RUN rm ./git.tar.gz
-RUN npm set unsafe-perm true
 RUN npm ci
 COPY ../config/lib/index.ts ./config/lib
 RUN npx lerna bootstrap
