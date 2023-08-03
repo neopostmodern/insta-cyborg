@@ -10,7 +10,7 @@
     "puppeteer-core": "^10.2.0",
     "sharp": "^0.28.3",
     "simpleddp": "^2.2.4",
-    "ts-node": "^10.7.0",
+    "ts-node": "^10.9.1",
     "ws": "^8.1.0"
   },
   "description": "> TODO: description",
