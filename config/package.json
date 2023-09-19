@@ -6,8 +6,7 @@
   "homepage": "",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "rm -fr dist/* && tsc -p tsconfig-mjs.json && tsc -p tsconfig-cjs.json && sh scripts/fix-package-type.sh",
-    "postinstall": "npm run build"
+    "build": "rm -fr dist/* && tsc -p tsconfig-mjs.json && tsc -p tsconfig-cjs.json && sh scripts/fix-package-type.sh"
   },
   "main": "dist/cjs/index.js",
   "module": "dist/mjs/index.js",

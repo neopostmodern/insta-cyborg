@@ -4,6 +4,5 @@
     "module": "esnext",
     "outDir": "dist/mjs",
     "target": "ESNext",
-
   }
 }

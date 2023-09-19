@@ -21,13 +21,9 @@
     "access": "public"
   },
   "scripts": {
-    "build": "rm -fr dist/* && tsc -p tsconfig-mjs.json && tsc -p tsconfig-cjs.json && sh scripts/fix-package-type.sh",
-    "postinstall": "npm run build"
+    "build": "rm -fr dist/* && tsc -p tsconfig-mjs.json && tsc -p tsconfig-cjs.json && sh scripts/fix-package-type.sh"
   },
   "dependencies": {
     "@insta-cyborg/config": "^0.1.0"
-  },
-  "devDependencies": {
-    "@types/node": "^17.0.21"
   }
 }

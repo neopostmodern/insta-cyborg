@@ -2,9 +2,10 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "lerna": "^4.0.0",
+    "lerna": "^7.1.4",
     "prettier": "^2.5.1",
-    "prettier-plugin-organize-imports": "^2.3.4"
+    "prettier-plugin-organize-imports": "^2.3.4",
+    "typescript": "^5.1.6"
   },
   "scripts": {
     "bot:run": "cd bot && npm run start",
@@ -12,6 +13,17 @@
     "preview:build": "cd preview && npm run build",
     "preview:start": "cd preview && npm run start",
     "server:start": "cd server && npm run start",
-    "util:build": "cd util && npm run build"
+    "util:build": "cd util && npm run build",
+    "postinstall": "npm run config:build && npm run util:build"
+  },
+  "workspaces": [
+    "config",
+    "util",
+    "bot",
+    "preview",
+    "server"
+  ],
+  "volta": {
+    "node": "20.5.0"
   }
 }

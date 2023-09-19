@@ -1,9 +1,7 @@
 {
+  "extends": "../tsconfig.json",
   "include": ["lib/*"],
   "compilerOptions": {
-    "declaration": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "resolveJsonModule": true
+    "rootDir": "./lib"
   }
 }
