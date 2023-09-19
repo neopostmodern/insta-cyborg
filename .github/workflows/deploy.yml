@@ -6,75 +6,140 @@ on:
       - master
 
 jobs:
- docker:
-   name: Build docker
-   runs-on: ubuntu-latest
-   services:
-     registry:
-       image: registry:2
-       ports:
-         - 5000:5000
-   steps:
-     -
-       name: Checkout
-       uses: actions/checkout@v3
-     -
-       name: Set up QEMU
-       uses: docker/setup-qemu-action@v2
-     -
-       name: Set up Docker Buildx
-       uses: docker/setup-buildx-action@v2
-       with:
-         # network=host driver-opt needed to push to local registry
-         driver-opts: network=host
-     -
-       name: Write config file
-       run: |
-         echo "export default { instagramUsername: '${INSTAGRAM_USERNAME}', portfolioOrigin: '${PORTFOLIO_ORIGIN}', portfolioDdpEndpoint: '${PORTFOLIO_DDP_ENDPOINT}', instaCyborgServerOrigin: '${INSTA_CYBORG_SERVER_ORIGIN}' }" > config/lib/index.ts
-       env:
-         INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
-         PORTFOLIO_ORIGIN: ${{ secrets.PORTFOLIO_ORIGIN }}
-         PORTFOLIO_DDP_ENDPOINT: ${{ secrets.PORTFOLIO_DDP_ENDPOINT }}
-         INSTA_CYBORG_SERVER_ORIGIN: ${{ secrets.INSTA_CYBORG_SERVER_ORIGIN }}
-     -
-       name: Login to GitHub Container Registry
-       uses: docker/login-action@v2
-       with:
-         registry: ghcr.io
-         username: ${{ github.repository_owner }}
-         password: ${{ secrets.GITHUB_TOKEN }}
-     -
-       name: Build base image
-       uses: docker/build-push-action@v4
-       with:
-         context: .
-         file: .docker/base.Dockerfile
-         platforms: linux/amd64,linux/arm64
-         push: true
-         tags: localhost:5000/insta-cyborg-base:latest
-         cache-from: type=gha
-         cache-to: type=gha,mode=max
-     -
-       name: Build and push server image
-       uses: docker/build-push-action@v4
-       with:
-         context: .
-         file: .docker/server.Dockerfile
-         build-contexts: |
-           insta-cyborg-base=docker-image://localhost:5000/insta-cyborg-base:latest
-         platforms: linux/amd64
-         push: true
-         tags: |
-           ghcr.io/neopostmodern/insta-cyborg-server:latest
-     -
-       name: Build and push bot image
-       uses: docker/build-push-action@v4
-       with:
-         context: .
-         file: .docker/bot.Dockerfile
-         build-contexts: |
-           insta-cyborg-base=docker-image://localhost:5000/insta-cyborg-base:latest
-         platforms: linux/arm64
-         push: true
-         tags: |
-           ghcr.io/neopostmodern/insta-cyborg-bot:latest
+  docker:
+    name: Build docker
+    runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          # network=host driver-opt needed to push to local registry
+          driver-opts: network=host
+      -
+        name: Write config file
+        run: |
+          echo "export default { instagramUsername: '${INSTAGRAM_USERNAME}', portfolioOrigin: '${PORTFOLIO_ORIGIN}', portfolioDdpEndpoint: '${PORTFOLIO_DDP_ENDPOINT}', instaCyborgServerOrigin: '${INSTA_CYBORG_SERVER_ORIGIN}' }" > config/lib/index.ts
+        env:
+          INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
+          PORTFOLIO_ORIGIN: ${{ secrets.PORTFOLIO_ORIGIN }}
+          PORTFOLIO_DDP_ENDPOINT: ${{ secrets.PORTFOLIO_DDP_ENDPOINT }}
+          INSTA_CYBORG_SERVER_ORIGIN: ${{ secrets.INSTA_CYBORG_SERVER_ORIGIN }}
+      -
+        name: Generate .dockerignore file
+        shell: bash
+        run:
+          ./.docker/generate-dockerignore.sh
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Build base image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: .docker/base.Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: localhost:5000/insta-cyborg-base:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push server image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: .docker/server.Dockerfile
+          build-contexts: |
+            insta-cyborg-base=docker-image://localhost:5000/insta-cyborg-base:latest
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/neopostmodern/insta-cyborg-server:latest
+      -
+        name: Build and push bot image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: .docker/bot.Dockerfile
+          build-contexts: |
+            insta-cyborg-base=docker-image://localhost:5000/insta-cyborg-base:latest
+          platforms: linux/arm64
+          push: true
+          tags: |
+            ghcr.io/neopostmodern/insta-cyborg-bot:latest
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          # network=host driver-opt needed to push to local registry
+          driver-opts: network=host
+      -
+        name: Write config file
+        run: |
+          echo "export default { instagramUsername: '${INSTAGRAM_USERNAME}', portfolioOrigin: '${PORTFOLIO_ORIGIN}', portfolioDdpEndpoint: '${PORTFOLIO_DDP_ENDPOINT}', instaCyborgServerOrigin: '${INSTA_CYBORG_SERVER_ORIGIN}' }" > config/lib/index.ts
+        env:
+          INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
+          PORTFOLIO_ORIGIN: ${{ secrets.PORTFOLIO_ORIGIN }}
+          PORTFOLIO_DDP_ENDPOINT: ${{ secrets.PORTFOLIO_DDP_ENDPOINT }}
+          INSTA_CYBORG_SERVER_ORIGIN: ${{ secrets.INSTA_CYBORG_SERVER_ORIGIN }}
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Build base image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: .docker/base.Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: localhost:5000/insta-cyborg-base:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push server image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: .docker/server.Dockerfile
+          build-contexts: |
+            insta-cyborg-base=docker-image://localhost:5000/insta-cyborg-base:latest
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/neopostmodern/insta-cyborg-server:latest
+      -
+        name: Build and push bot image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: .docker/bot.Dockerfile
+          build-contexts: |
+            insta-cyborg-base=docker-image://localhost:5000/insta-cyborg-base:latest
+          platforms: linux/arm64
+          push: true
+          tags: |
+            ghcr.io/neopostmodern/insta-cyborg-bot:latest
