@@ -37,14 +37,23 @@ const useAllImages = (): UseAllImages => {
     if (!('data' in dataState)) {
       throw Error("Can't request new image before image data is loaded.")
     }
-    const imageId = await requestNewImage()
-    setDataState({
-      ...dataState,
-      data: {
-        ...dataState.data,
-        available: [imageId, ...dataState.data.available],
-      },
-    })
+    try {
+      const imageId = await requestNewImage()
+      setDataState({
+        ...dataState,
+        data: {
+          ...dataState.data,
+          available: [imageId, ...dataState.data.available],
+        },
+      })
+    } catch (exception) {
+      setDataState({
+        error: true,
+        message:
+          'Failed to request new image: ' +
+          (exception instanceof Error ? exception.message : 'Unknown error'),
+      })
+    }
   }
   const deleteImageWrapper = async (imageId: string) => {
     if (!('data' in dataState)) {

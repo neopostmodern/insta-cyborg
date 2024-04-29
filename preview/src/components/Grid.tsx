@@ -26,6 +26,9 @@ const Grid: React.FC<GridProps> = ({
       <Centered>
         <h1>Error</h1>
         {data.message}
+        <br />
+        <br />
+        <Button onClick={() => location.reload()}>Reload page</Button>
       </Centered>
     )
   }
