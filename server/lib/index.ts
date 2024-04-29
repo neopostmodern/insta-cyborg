@@ -87,27 +87,44 @@ app.get('/images', (request, response) => {
   )
 })
 app.post('/images/generate', async (request, response) => {
-  const usedImageIds = getAllUsedImageIds()
-  const index = usedImageIds.length
+  try {
+    logger.trace('Start image generation procedure...')
+    const usedImageIds = getAllUsedImageIds()
+    logger.trace(`Acquired used image IDs: ${usedImageIds.join(', ')}`)
+    const index = usedImageIds.length
 
-  const notPostedImages = await getImages({ imageIdBlacklist: usedImageIds })
-  // todo: instead of shuffling sort by date and sample with a strong bias for recency
-  shuffleArray(notPostedImages)
-  const image: DescribedImage &
-    Partial<
-      Pick<CaptionedImage, Exclude<keyof CaptionedImage, keyof DescribedImage>>
-    > = notPostedImages[0]
-  image.postCaption = captionForImagePost(image)
-  image.storyText = textForStory(image)
-  await fs.writeFile(
-    getImageFilePath(image, null, 'json'),
-    JSON.stringify(image),
-  )
-  const imagePath = await downloadImage(image)
-  await applyOverlayToArtworkImage(imagePath, image, index)
-  const storyPath = await composeStory(imagePath, image)
-  pushAvailableImageId(image.imageId)
-  response.send(JSON.stringify({ imageId: image.imageId }))
+    logger.trace('Fetch images and filter for unused images')
+    const notPostedImages = await getImages({ imageIdBlacklist: usedImageIds })
+    logger.trace(`Acquired ${notPostedImages.length} not posted images`)
+    // todo: instead of shuffling sort by date and sample with a strong bias for recency
+    shuffleArray(notPostedImages)
+    const image: DescribedImage &
+      Partial<
+        Pick<
+          CaptionedImage,
+          Exclude<keyof CaptionedImage, keyof DescribedImage>
+        >
+      > = notPostedImages[0]
+    logger.trace('Selected image', image)
+    image.postCaption = captionForImagePost(image)
+    logger.trace('Generated post caption', image.postCaption)
+    image.storyText = textForStory(image)
+    logger.trace('Generated story text', image.storyText)
+    await fs.writeFile(
+      getImageFilePath(image, null, 'json'),
+      JSON.stringify(image),
+    )
+    logger.trace('Image metadata saved.')
+    const imagePath = await downloadImage(image)
+    logger.trace(`Image downloaded to ${imagePath}.`)
+    await applyOverlayToArtworkImage(imagePath, image, index)
+    const storyPath = await composeStory(imagePath, image)
+    pushAvailableImageId(image.imageId)
+    response.send(JSON.stringify({ imageId: image.imageId }))
+  } catch (exception) {
+    console.error(exception)
+    response.sendStatus(500)
+  }
 })
 app.put('/images/:imageId', async (request, response) => {
   const { imageId } = request.params
