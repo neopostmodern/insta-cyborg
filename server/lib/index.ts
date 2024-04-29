@@ -11,6 +11,7 @@ import 'dotenv/config'
 import express from 'express'
 import * as fs from 'fs/promises'
 import * as path from 'path'
+import pino_http from 'pino-http'
 import { STORAGE_PATH_MEDIA } from './config'
 import { applyOverlayToArtworkImage, composeStory } from './graphics'
 import { downloadImage, getImages } from './portfolio'
@@ -23,6 +24,7 @@ import {
   pushPostedImageId,
 } from './state'
 import { getImageFilePath } from './util'
+import { logger } from './logger'
 
 const port = 3001
 
@@ -35,6 +37,7 @@ app.use(
   }),
 )
 app.use(cookieParser())
+app.use(pino_http({ logger }))
 app.use((request, response, next) => {
   if (
     !request.path.startsWith('/auth/') &&
