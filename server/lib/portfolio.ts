@@ -1,14 +1,18 @@
 import config from '@insta-cyborg/config'
 import { DescribedImage, ImagePurpose } from '@insta-cyborg/util'
 import { createWriteStream, promises as fs } from 'fs'
+import * as assert from 'node:assert'
 import https from 'https'
 import simpleDDP from 'simpleddp'
 import ws from 'ws'
 import { getImageFilePath } from './util'
 
+assert.ok(config.portfolioDdpEndpoint)
+
 const ddp = new simpleDDP({
   endpoint: config.portfolioDdpEndpoint,
   SocketConstructor: ws,
+  maxTimeout: 10000,
 })
 
 interface Post {
