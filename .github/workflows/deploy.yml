@@ -9,6 +9,7 @@ jobs:
   docker:
     name: Build docker
     runs-on: ubuntu-latest
+    environment: ${{ startsWith(github.ref, 'refs/tags/') && 'production' || 'staging' }}
     services:
       registry:
         image: registry:2
@@ -56,7 +57,7 @@ jobs:
           file: .docker/base.Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: localhost:5000/insta-cyborg-base:latest
+          tags: localhost:5000/insta-cyborg-base:${{vars.DOCKER_TAG}}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -66,11 +67,11 @@ jobs:
           context: .
           file: .docker/server.Dockerfile
           build-contexts: |
-            insta-cyborg-base=docker-image://localhost:5000/insta-cyborg-base:latest
+            insta-cyborg-base=docker-image://localhost:5000/insta-cyborg-base:${{vars.DOCKER_TAG}}
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/neopostmodern/insta-cyborg-server:latest
+            ghcr.io/neopostmodern/insta-cyborg-server:${{vars.DOCKER_TAG}}
       -
         name: Build and push bot image
         uses: docker/build-push-action@v4
@@ -78,11 +79,11 @@ jobs:
           context: .
           file: .docker/bot.Dockerfile
           build-contexts: |
-            insta-cyborg-base=docker-image://localhost:5000/insta-cyborg-base:latest
+            insta-cyborg-base=docker-image://localhost:5000/insta-cyborg-base:${{vars.DOCKER_TAG}}
           platforms: linux/arm64
           push: true
           tags: |
-            ghcr.io/neopostmodern/insta-cyborg-bot:latest
+            ghcr.io/neopostmodern/insta-cyborg-bot:${{vars.DOCKER_TAG}}
       -
         name: Build and push preview image
         uses: docker/build-push-action@v4
@@ -90,43 +91,33 @@ jobs:
           context: .
           file: .docker/preview.Dockerfile
           build-contexts: |
-            insta-cyborg-base=docker-image://localhost:5000/insta-cyborg-base:latest
+            insta-cyborg-base=docker-image://localhost:5000/insta-cyborg-base:${{vars.DOCKER_TAG}}
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/neopostmodern/insta-cyborg-preview:latest
+            ghcr.io/neopostmodern/insta-cyborg-preview:${{vars.DOCKER_TAG}}
 
   deploy:
     name: Deploy frontend
     runs-on: ubuntu-latest
+    environment: ${{ startsWith(github.ref, 'refs/tags/') && 'production' || 'staging' }}
     needs: docker
     steps:
       -
         name: Pull image
-        run: docker pull ghcr.io/neopostmodern/insta-cyborg-preview:latest
+        run: docker pull ghcr.io/neopostmodern/insta-cyborg-preview:${{vars.DOCKER_TAG}}
       - name: Extract files
         run: |
-          temp_container_id=$(docker create --name preview-temp ghcr.io/neopostmodern/insta-cyborg-preview:latest)
+          temp_container_id=$(docker create --name preview-temp ghcr.io/neopostmodern/insta-cyborg-preview:${{vars.DOCKER_TAG}})
           docker cp $temp_container_id:/usr/local/apache2/htdocs preview-files
           docker rm preview-temp
         shell: bash
       -
-        name: Deploy to production
-        if: startsWith(github.ref, 'refs/tags/')
+        name: Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ${{ secrets.FTP_SERVER_PROD }}
-          username: ${{ secrets.FTP_USERNAME_PROD }}
-          password: ${{ secrets.FTP_PASSWORD_PROD }}
-          local-dir: preview-files/
-          server-dir: /
-      -
-        name: Deploy to staging
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: ${{ secrets.FTP_SERVER_STAGING }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
           local-dir: preview-files/
           server-dir: /
