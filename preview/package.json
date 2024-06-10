@@ -1,12 +1,12 @@
 {
   "name": "@insta-cyborg/preview",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
-    "@insta-cyborg/config": "^0.2.0",
-    "@insta-cyborg/util": "^0.2.0",
+    "@insta-cyborg/config": "^0.2.1",
+    "@insta-cyborg/util": "^0.2.1",
     "@mui/icons-material": "^5.5.0",
     "@mui/material": "^5.5.0",
     "@testing-library/jest-dom": "^5.16.2",
