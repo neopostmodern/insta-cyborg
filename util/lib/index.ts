@@ -21,7 +21,7 @@ export const createRelativeDirectoryIfNotExists = async (
   folderUrl: URL,
 ): Promise<string> => {
   // the callback is necessary to bypass browser checks :shrug:
-  const { mkdir } = await import((() => 'fs/promises')())
+  const { mkdir } = await import(/* @vite-ignore */ (() => 'fs/promises')())
   try {
     await mkdir(folderUrl)
   } catch (error) {
