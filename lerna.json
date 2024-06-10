@@ -1,10 +1,4 @@
 {
-  "packages": [
-    "bot",
-    "config",
-    "preview",
-    "server",
-    "util"
-  ],
-  "version": "0.1.0"
+  "packages": ["bot", "config", "preview", "server", "util"],
+  "version": "0.2.0"
 }

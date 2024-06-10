@@ -1,8 +1,8 @@
 {
   "author": "neopostmodern <clemens@neopostmodern.com>",
   "dependencies": {
-    "@insta-cyborg/config": "^0.1.0",
-    "@insta-cyborg/util": "^0.1.0",
+    "@insta-cyborg/config": "^0.2.0",
+    "@insta-cyborg/util": "^0.2.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
@@ -17,8 +17,8 @@
   },
   "description": "> TODO: description",
   "devDependencies": {
-    "@types/cors": "^2.8.12",
     "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/puppeteer-core": "^5.4.0",
     "@types/sharp": "^0.28.5",
@@ -41,5 +41,5 @@
     "start": "node --experimental-specifier-resolution=node --loader ts-node/esm lib/index.ts"
   },
   "type": "module",
-  "version": "0.1.0"
+  "version": "0.2.0"
 }
