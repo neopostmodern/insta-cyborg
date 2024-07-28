@@ -72,7 +72,7 @@ function App() {
         />
         <Route
           path='/post/:imageId'
-          element={<SinglePost deleteImage={deleteImage} />}
+          element={<SinglePost deleteImage={deleteImage} mobile={mobile} />}
         />
         <Route path='/post/:imageId/edit' element={<EditPost />} />
       </Routes>

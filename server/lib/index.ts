@@ -23,7 +23,11 @@ import {
   pushAvailableImageId,
   pushPostedImageId,
 } from './state'
-import { getImageFilePath } from './util'
+import {
+  getHighestPublishDate,
+  getImageFilePath,
+  nextDayByWeekdayType,
+} from './util'
 import { logger } from './logger'
 
 const port = 3001
@@ -110,6 +114,14 @@ app.post('/images/generate', async (request, response) => {
     logger.trace('Generated post caption', image.postCaption)
     image.storyText = textForStory(image)
     logger.trace('Generated story text', image.storyText)
+    const highestPublishDate = await getHighestPublishDate()
+    const publishAt = nextDayByWeekdayType(
+      highestPublishDate || new Date(),
+      1, // Monday
+      !highestPublishDate,
+    )
+    publishAt.setHours(11, 0, 0, 0)
+    image.publishAt = publishAt
     await fs.writeFile(
       getImageFilePath(image, null, 'json'),
       JSON.stringify(image),

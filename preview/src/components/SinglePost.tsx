@@ -17,11 +17,14 @@ import { CornerControls } from '../util'
 import DeletePostDialog from './DeletePostDialog'
 import { ImageDescription } from './ImageDescription'
 import UserLine from './UserLine'
+import { PublicationDate } from './PublicationDate'
 
 const SinglePost = ({
   deleteImage,
+  mobile,
 }: {
   deleteImage: (imageId: string) => Promise<void>
+  mobile?: boolean
 }) => {
   const { imageId } = useParams()
   if (imageId === undefined) {
@@ -55,7 +58,12 @@ const SinglePost = ({
   } else if ('loading' in imageData) {
     postCaption = <CircularProgress />
   } else {
-    postCaption = <ImageDescription postCaption={imageData.data.postCaption} />
+    postCaption = (
+      <ImageDescription
+        postCaption={imageData.data.postCaption}
+        mobile={mobile}
+      />
+    )
   }
 
   return (
@@ -142,6 +150,12 @@ const SinglePost = ({
               `}
             />
             {postCaption}
+            {'data' in imageData && (
+              <PublicationDate
+                imagePublishAt={imageData.data.publishAt}
+                mobile={mobile}
+              />
+            )}
           </div>
         </Paper>
       </div>

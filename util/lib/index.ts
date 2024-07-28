@@ -14,6 +14,7 @@ export type DescribedImage = {
 export type CaptionedImage = DescribedImage & {
   postCaption: string
   storyText: string
+  publishAt: Date
 }
 export type AllImagesData = { posted: Array<string>; available: Array<string> }
 
@@ -138,3 +139,6 @@ export const getImageUrl = (...args: Parameters<typeof getImageFileName>) =>
   config.instaCyborgServerOrigin +
   '/media/' +
   getImageFileName.apply(null, args)
+
+export const sleep = (seconds: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, seconds * 1000))

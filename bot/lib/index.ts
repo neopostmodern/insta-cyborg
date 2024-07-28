@@ -1,26 +1,25 @@
-import {
-  fetchImageData,
-  fetchImageList,
-  ImagePurpose,
-  setAuthorizationHeaderForFetch,
-} from '@insta-cyborg/util'
-import { postImagePost, updateLinkInBio } from './instagram'
-import { clearTempFolder, downloadImageFile, markImagePosted } from './network'
+import { setAuthorizationHeaderForFetch, sleep } from '@insta-cyborg/util'
+import { fetchAndPublishImage, NO_IMAGES_AVAILABLE } from './actions'
+
+process.on('SIGINT', () => {
+  console.log('Bot terminating.')
+  process.exit(1)
+})
+
+const mainLoop = async () => {
+  try {
+    await fetchAndPublishImage()
+  } catch (error) {
+    if (error.message !== NO_IMAGES_AVAILABLE) {
+      throw error
+    }
+  }
+
+  // todo: send out status report on Sunday (especially a warning if no image is ready)
+}
 
 setAuthorizationHeaderForFetch(process.env.INSTA_CYBORG_AUTHORIZATION)
-const allImages = await fetchImageList()
-const imageId = allImages.available[0]
-if (!imageId) {
-  throw Error('No image available to post')
+while (true) {
+  await mainLoop()
+  await sleep(60)
 }
-const imageData = await fetchImageData(imageId)
-const postWithOverlayFilePath = await downloadImageFile(
-  imageId,
-  ImagePurpose.POST_WITH_OVERLAY,
-)
-await postImagePost(postWithOverlayFilePath, imageData.postCaption)
-// await postStory(storyPath, { withLatestPost: true })
-await markImagePosted(imageId)
-await updateLinkInBio(imageData.projectUrl)
-await clearTempFolder()
-process.exit(0)
