@@ -114,7 +114,13 @@ app.post('/images/generate', async (request, response) => {
     logger.trace('Generated post caption', image.postCaption)
     image.storyText = textForStory(image)
     logger.trace('Generated story text', image.storyText)
-    const highestPublishDate = await getHighestPublishDate()
+    let highestPublishDate = await getHighestPublishDate()
+    if (highestPublishDate) {
+      if (highestPublishDate.getTime() < new Date().getTime()) {
+        // if the system got out of schedule, don't continue in the past - jump to next scheduled date
+        highestPublishDate = null
+      }
+    }
     const publishAt = nextDayByWeekdayType(
       highestPublishDate || new Date(),
       1, // Monday
@@ -130,7 +136,7 @@ app.post('/images/generate', async (request, response) => {
     const imagePath = await downloadImage(image)
     logger.trace(`Image downloaded to ${imagePath}.`)
     await applyOverlayToArtworkImage(imagePath, image, index)
-    const storyPath = await composeStory(imagePath, image)
+    // const storyPath = await composeStory(imagePath, image)
     pushAvailableImageId(image.imageId)
     response.send(JSON.stringify({ imageId: image.imageId }))
   } catch (exception) {

@@ -54,8 +54,9 @@ export const getHighestPublishDate = async (): Promise<Date | null> => {
     return null
   }
 
-  validImages.sort((a, b) => a.publishAt.getTime() - b.publishAt.getTime())
-  return validImages[0].publishAt
+  const dates = validImages.map((image) => new Date(image.publishAt))
+  dates.sort((a, b) => b.getTime() - a.getTime())
+  return dates[0]
 }
 
 export const nextDayByWeekdayType = (
