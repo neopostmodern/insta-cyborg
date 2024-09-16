@@ -116,7 +116,9 @@ app.post('/images/generate', async (request, response) => {
     logger.trace('Generated story text', image.storyText)
     let highestPublishDate = await getHighestPublishDate()
     if (highestPublishDate) {
-      if (highestPublishDate.getTime() < new Date().getTime()) {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      if (highestPublishDate.getTime() < today.getTime()) {
         // if the system got out of schedule, don't continue in the past - jump to next scheduled date
         highestPublishDate = null
       }
