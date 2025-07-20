@@ -1,6 +1,6 @@
 {
   "name": "@insta-cyborg/bot",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -10,8 +10,8 @@
   "author": "neopostmodern <clemens@neopostmodern.com>",
   "license": "ISC",
   "dependencies": {
-    "@insta-cyborg/config": "^0.3.1",
-    "@insta-cyborg/util": "^0.3.1",
+    "@insta-cyborg/config": "^0.4.0",
+    "@insta-cyborg/util": "^0.4.0",
     "dotenv": "^16.0.1",
     "instagram-private-api": "^1.46.1"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@insta-cyborg/util",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "type": "module",
   "description": "> TODO: description",
   "author": "neopostmodern <clemens@neopostmodern.com>",
@@ -24,6 +24,6 @@
     "build": "rm -fr dist/* && tsc -p tsconfig-mjs.json && tsc -p tsconfig-cjs.json && sh scripts/fix-package-type.sh"
   },
   "dependencies": {
-    "@insta-cyborg/config": "^0.3.1"
+    "@insta-cyborg/config": "^0.4.0"
   }
 }
