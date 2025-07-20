@@ -52,7 +52,7 @@ const getPortfolioData = async (): Promise<{
 }> =>
   ddp.call('bericht.posts.public', {
     __userId: '',
-    tag: ['portfolio'],
+    tag: ['art'],
   }) as any
 
 const imageMarkdownRegex = /!\[([^\]]*)]\(\*([^)/]+)(\/\w+)?\)/g
